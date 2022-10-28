@@ -14,7 +14,7 @@ admin.site.register(Category, CategoryAdmin)
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'rayat_price', 'student_price', 'discount_amount', 'is_active']
+    list_display = ['title','image', 'category', 'rayat_price', 'student_price', 'discount_amount', 'is_active']
     prepopulated_fields = {"slug": ('title',)}
-    list_editable = ['rayat_price', 'student_price', 'discount_amount', 'is_active']
+    list_editable = ['rayat_price', 'image','student_price', 'discount_amount', 'is_active']
     list_filter = ['is_active', 'category', 'title', 'rayat_price']
