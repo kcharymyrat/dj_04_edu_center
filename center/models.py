@@ -5,6 +5,7 @@ class CategoryManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
 
+
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -48,7 +49,7 @@ class Course(models.Model):
 
 class NewsFeed(models.Model):
     title = models.CharField(max_length=100)
-    author = models.CharField(max_length = 100, null=True, blank=True)
+    author = models.CharField(max_length=100, null=True, blank=True)
     content = models.TextField()
     image = models.ImageField(upload_to="images/newsfeed/", null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -58,5 +59,9 @@ class Announcement(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     image = models.ImageField(upload_to="images/anouncements/", null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    due = models.DateField(null=True, blank=True)
+    is_active = models.BooleanField(default=False)
 
-# TODO Wishlist, CourseAppliers, Employement, Feedbacks, Lottery 
+
+# TODO Wishlist, CourseAppliers, Employement, Feedbacks, Lottery
