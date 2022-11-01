@@ -7,6 +7,9 @@
     <article>
         <section id="announcement"></section>
         <h2>Welcome to Diller Merkezi</h2>
+        {% for course in qs %}
+            <p>{{ course.title }}</p>
+        {% endfor %}
     </article>
     <aside>
         <section id="newsfeed"></section>

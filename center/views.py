@@ -9,4 +9,5 @@ from .models import (
 
 
 def home_view(request, *args, **kwargs):
-    pass
+    qs = Course.actives.all()
+    return render(request, "center/index.html", {"qs": qs})
