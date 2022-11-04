@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class CategoryManager(models.Manager):
@@ -21,6 +22,15 @@ class Category(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name}"
+
+
+class CategoryFeedbacks(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    feedback = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.category}: {self.feedback}"
 
 
 class CourseManager(models.Manager):
@@ -47,12 +57,24 @@ class Course(models.Model):
         return f"{self.title}"
 
 
+class CourseFeedback(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    feedback = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.course}: {self.feedback}"
+
+
 class NewsFeed(models.Model):
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100, null=True, blank=True)
     content = models.TextField()
     image = models.ImageField(upload_to="images/newsfeed/", null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.title} by {self.author}: {self.content}"
 
 
 class Announcement(models.Model):
@@ -63,5 +85,59 @@ class Announcement(models.Model):
     due = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
 
+    def __str__(self) -> str:
+        return f"{self.title}: {self.content}"
 
-# TODO Wishlist, CourseAppliers, Employement, Feedbacks, Lottery
+
+class CourseWishlist(models.Model):
+    course_title = models.CharField(max_length=100)
+    course_description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.course_title}: {self.course_description}"
+
+
+class GeneralWishlist(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.title}: {self.description}"
+
+
+class NewCoursePoll(models.Model):
+    course = models.CharField(max_length=100)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.PositiveIntegerField(default=0)
+
+    def __str__(self) -> str:
+        return f"Poll for {self.title}: {self.likes} likes"
+
+
+class NewCoursePollFeedback(models.Model):
+    poll = models.ForeignKey(
+        "NewCoursePoll", verbose_name=_("Poll for New Course"), on_delete=models.CASCADE
+    )
+    feedback = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"Poll for {self.poll}: {self.feedback}"
+
+
+class Employment(models.Model):
+    first_name = models.CharField(_("First name"), max_length=50)
+    last_name = models.CharField(_("Last name"), max_length=50)
+    email = models.EmailField(_("E-mail"), max_length=254)
+    phone = models.CharField(_("Phone number"), max_length=50)
+    position = models.CharField(_("Position applied"), max_length=50)
+    cv = models.FileField(_("Resume"), upload_to="resumes/", max_length=100)
+
+    def __str__(self) -> str:
+        return f"{self.email}: {self.position}"
+
+
+# TODO CourseAppliers, Lottery
